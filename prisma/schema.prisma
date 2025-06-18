@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+  generator client {
+    provider = "prisma-client-js"
+  }
+  
+  datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+  }
+
+model MiniJuego {
+  id        Int       @id @default(autoincrement())
+  miniJuego String
+  partidas  Partida[]
+}
+
+model Extremidad {
+  id         Int       @id @default(autoincrement())
+  extremidad String
+  partidas   Partida[]
+}
+
+model Licencia {
+  id             Int            @id @default(autoincrement())
+  licencia       String
+  cantidad       Int
+  organizaciones Organizacion[]
+}
+
+model Organizacion {
+  id           Int         @id @default(autoincrement())
+  organizacion String
+  email        String      @unique
+  pass         String
+  direccion    String
+  telefono     String
+  idLicencia   Int
+  licencia     Licencia    @relation(fields: [idLicencia], references: [id])
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  lastLogin    DateTime    @default(now())
+  isActive     Boolean     @default(true)
+  terapeutas   Terapeuta[]
+}
+
+model Terapeuta {
+  id             Int          @id @default(autoincrement())
+  nombre         String
+  aPaterno       String
+  aMaterno       String?
+  email          String       @unique
+  pass           String
+  idOrganizacion Int
+  organizacion   Organizacion @relation(fields: [idOrganizacion], references: [id])
+  telefono       String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  lastLogin      DateTime     @default(now())
+  lastLoginApp   DateTime     @default(now())
+  isActive       Boolean      @default(true)
+  pacientes      Paciente[]
+  partidas       Partida[]
+}
+
+model Paciente {
+  id              Int       @id
+  nombre          String
+  aPaterno        String
+  aMaterno        String?
+  sexo            Sexo
+  diagnostico     String
+  fechaNacimiento DateTime
+  idTerapeuta     Int
+  terapeuta       Terapeuta @relation(fields: [idTerapeuta], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  isActive        Boolean   @default(true)
+  partidas        Partida[]
+}
+
+enum Sexo {
+  M
+  F
+}
+
+model Partida {
+  id              Int        @id @default(autoincrement())
+  idMiniJuego     Int
+  miniJuego       MiniJuego  @relation(fields: [idMiniJuego], references: [id])
+  idPaciente      Int
+  paciente        Paciente   @relation(fields: [idPaciente], references: [id])
+  idTerapeuta     Int
+  terapeuta       Terapeuta  @relation(fields: [idTerapeuta], references: [id])
+  dificultad      Int
+  tiempo          Int
+  puntuacion      Int
+  idExtremidad    Int
+  extremidad      Extremidad @relation(fields: [idExtremidad], references: [id])
+  anguloMaximo    Float
+  derechoMaximo   Float
+  izquierdoMaximo Float
+  arribaMaximo    Float
+  abajoMaximo     Float
+  responseTimeMax Float
+  responseTimeMin Float
+  responseTimeAvg Float
+  createdAt       DateTime   @default(now())
+}
