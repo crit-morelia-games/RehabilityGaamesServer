@@ -20,4 +20,6 @@ router.get("/partida/:id", authenticateToken, getPartidaValidationRules, validat
 // Para crear una partida
 router.post("/partida", authTokenTerapeuta, createPartidaValidationRules, validate, createPartida);
 
+router.post("/football", authTokenTerapeuta, validate, creteFootballGame)
+
 export default router;
