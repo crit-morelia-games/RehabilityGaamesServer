@@ -137,7 +137,12 @@ export const createFootballGame = async (req, res) => {
     const {idPaciente, easyMode, tiempo, atajadasAbajo, atajadasArriba, atajadasEnMedio, golesAbajo, golesArriba, golesEnMedio} = req.body;
     const newFootballGame = await prisma.footballGame.create({
       data: {
-        idPaciente: parseInt(idPaciente),
+        paciente: {
+          connect: { id: parseInt(idPaciente) }
+        },
+        terapeuta: {
+          connect: { id: parseInt(req.user.id) }
+        },
         easyMode: easyMode,
         tiempo: parseInt(tiempo),
         atajadasAbajo: parseInt(atajadasAbajo),
