@@ -132,7 +132,7 @@ export const createPartida = async (req, res) => {
   }
 };
 
-export const creteFootballGame = async (req, res) => {
+export const createFootballGame = async (req, res) => {
   try {
     const {idPaciente, easyMode, tiempo, atajadasAbajo, atajadasArriba, atajadasEnMedio, golesAbajo, golesArriba, golesEnMedio} = req.body;
     const newFootballGame = await prisma.footballGame.create({
