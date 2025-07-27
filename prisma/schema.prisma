@@ -56,7 +56,6 @@ model Terapeuta {
   lastLogin      DateTime       @default(now())
   lastLoginApp   DateTime       @default(now())
   isActive       Boolean        @default(true)
-  FootballGame   FootballGame[]
   pacientes      Paciente[]
   partidas       Partida[]
   organizacion   Organizacion   @relation(fields: [idOrganizacion], references: [id])
@@ -74,13 +73,12 @@ model Paciente {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   isActive        Boolean        @default(true)
-  FootballGame    FootballGame[]
   terapeuta       Terapeuta      @relation(fields: [idTerapeuta], references: [id])
   partidas        Partida[]
 }
 
 model Partida {
-  id              Int        @id @default(autoincrement())
+  id              Int          @id @default(autoincrement())
   idMiniJuego     Int?
   idPaciente      Int?
   idTerapeuta     Int?
@@ -96,28 +94,24 @@ model Partida {
   responseTimeMax Float?
   responseTimeMin Float?
   responseTimeAvg Float?
-  createdAt       DateTime   @default(now())
-  extremidad      Extremidad? @relation(fields: [idExtremidad], references: [id])
-  miniJuego       MiniJuego?  @relation(fields: [idMiniJuego], references: [id])
-  paciente        Paciente?   @relation(fields: [idPaciente], references: [id])
-  terapeuta       Terapeuta?  @relation(fields: [idTerapeuta], references: [id])
+  createdAt       DateTime     @default(now())
+  extremidad      Extremidad?  @relation(fields: [idExtremidad], references: [id])
+  miniJuego       MiniJuego?   @relation(fields: [idMiniJuego], references: [id])
+  paciente        Paciente?    @relation(fields: [idPaciente], references: [id])
+  terapeuta       Terapeuta?   @relation(fields: [idTerapeuta], references: [id])
+  FootballGame    FootballGame?
 }
 
 model FootballGame {
-  id              Int       @id @default(autoincrement())
-  idPaciente      Int
-  idTerapeuta     Int
-  createdAt       DateTime  @default(now())
-  easyMode        Boolean   @default(false)
-  tiempo          Int
+  id              Int        @id @default(autoincrement())
   atajadasAbajo   Int
   atajadasArriba  Int
   atajadasEnMedio Int
   golesAbajo      Int
   golesArriba     Int
   golesEnMedio    Int
-  paciente        Paciente  @relation(fields: [idPaciente], references: [id])
-  terapeuta       Terapeuta @relation(fields: [idTerapeuta], references: [id])
+  idPartida       Int        @unique
+  Partida         Partida    @relation(fields: [idPartida], references: [id])
 }
 
 enum Sexo {

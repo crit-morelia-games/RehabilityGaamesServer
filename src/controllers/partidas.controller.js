@@ -93,6 +93,16 @@ export const getPartida = async (req, res) => {
             aMaterno: true,
           },
         },
+        footballGame: {
+          select: {
+            atajadasAbajo: true,
+            atajadasArriba: true,
+            atajadasEnMedio: true,
+            golesAbajo: true,
+            golesArriba: true,
+            golesEnMedio: true,
+          },
+        },
       },
     });
     res.json({ msg: "Partida con id: " + id, error: false, data: response });
@@ -135,24 +145,6 @@ export const createPartida = async (req, res) => {
 export const createFootballGame = async (req, res) => {
   try {
     const {idPaciente, easyMode, tiempo, atajadasAbajo, atajadasArriba, atajadasEnMedio, golesAbajo, golesArriba, golesEnMedio} = req.body;
-    const newFootballGame = await prisma.footballGame.create({
-      data: {
-        paciente: {
-          connect: { id: parseInt(idPaciente) }
-        },
-        terapeuta: {
-          connect: { id: parseInt(req.user.id) }
-        },
-        easyMode: easyMode,
-        tiempo: parseInt(tiempo),
-        atajadasAbajo: parseInt(atajadasAbajo),
-        atajadasArriba: parseInt(atajadasArriba),
-        atajadasEnMedio: parseInt(atajadasEnMedio),
-        golesAbajo: parseInt(golesAbajo),
-        golesArriba: parseInt(golesArriba),
-        golesEnMedio: parseInt(golesEnMedio),
-      },
-    });
     const newPartida = await prisma.partida.create({
       data: {
         idMiniJuego: parseInt(4),
@@ -162,6 +154,17 @@ export const createFootballGame = async (req, res) => {
         tiempo: parseInt(tiempo),
         puntuacion: parseInt(atajadasAbajo) + parseInt(atajadasArriba) + parseInt(atajadasEnMedio),
         idExtremidad: parseInt(3),
+      },
+    });
+    const newFootballGame = await prisma.footballGame.create({
+      data: {
+        atajadasAbajo: parseInt(atajadasAbajo),
+        atajadasArriba: parseInt(atajadasArriba),
+        atajadasEnMedio: parseInt(atajadasEnMedio),
+        golesAbajo: parseInt(golesAbajo),
+        golesArriba: parseInt(golesArriba),
+        golesEnMedio: parseInt(golesEnMedio),
+        idPartida: newPartida.id,
       },
     });
     res.json({ msg: "Juego de fútbol creado con éxito", error: false, data: newFootballGame });
