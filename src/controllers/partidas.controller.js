@@ -153,6 +153,17 @@ export const createFootballGame = async (req, res) => {
         golesEnMedio: parseInt(golesEnMedio),
       },
     });
+    const newPartida = await prisma.partida.create({
+      data: {
+        idMiniJuego: parseInt(4),
+        idPaciente: parseInt(idPaciente),
+        idTerapeuta: parseInt(req.user.id),
+        dificultad: easyMode ? 1 : 2,
+        tiempo: parseInt(tiempo),
+        puntuacion: parseInt(atajadasAbajo) + parseInt(atajadasArriba) + parseInt(atajadasEnMedio),
+        idExtremidad: parseInt(3),
+      },
+    });
     res.json({ msg: "Juego de fútbol creado con éxito", error: false, data: newFootballGame });
   } catch (error) {
     console.log(error);

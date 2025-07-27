@@ -81,26 +81,26 @@ model Paciente {
 
 model Partida {
   id              Int        @id @default(autoincrement())
-  idMiniJuego     Int
-  idPaciente      Int
-  idTerapeuta     Int
-  dificultad      Int
-  tiempo          Int
-  puntuacion      Int
-  idExtremidad    Int
-  anguloMaximo    Float
-  derechoMaximo   Float
-  izquierdoMaximo Float
-  arribaMaximo    Float
-  abajoMaximo     Float
-  responseTimeMax Float
-  responseTimeMin Float
-  responseTimeAvg Float
+  idMiniJuego     Int?
+  idPaciente      Int?
+  idTerapeuta     Int?
+  dificultad      Int?
+  tiempo          Int?
+  puntuacion      Int?
+  idExtremidad    Int?
+  anguloMaximo    Float?
+  derechoMaximo   Float?
+  izquierdoMaximo Float?
+  arribaMaximo    Float?
+  abajoMaximo     Float?
+  responseTimeMax Float?
+  responseTimeMin Float?
+  responseTimeAvg Float?
   createdAt       DateTime   @default(now())
-  extremidad      Extremidad @relation(fields: [idExtremidad], references: [id])
-  miniJuego       MiniJuego  @relation(fields: [idMiniJuego], references: [id])
-  paciente        Paciente   @relation(fields: [idPaciente], references: [id])
-  terapeuta       Terapeuta  @relation(fields: [idTerapeuta], references: [id])
+  extremidad      Extremidad? @relation(fields: [idExtremidad], references: [id])
+  miniJuego       MiniJuego?  @relation(fields: [idMiniJuego], references: [id])
+  paciente        Paciente?   @relation(fields: [idPaciente], references: [id])
+  terapeuta       Terapeuta?  @relation(fields: [idTerapeuta], references: [id])
 }
 
 model FootballGame {
