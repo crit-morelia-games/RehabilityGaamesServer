@@ -34,6 +34,16 @@ export const getPartidasPaciente = async (req, res) => {
             extremidad: true,
           },
         },
+        FootballGame: {
+          select: {
+            atajadasAbajo: true,
+            atajadasArriba: true,
+            atajadasEnMedio: true,
+            golesAbajo: true,
+            golesArriba: true,
+            golesEnMedio: true,
+          },
+        },
       },
     });
 
