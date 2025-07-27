@@ -93,6 +93,16 @@ export const getPartida = async (req, res) => {
             aMaterno: true,
           },
         },
+        FootballGame: {
+          select: {
+            atajadasAbajo: true,
+            atajadasArriba: true,
+            atajadasEnMedio: true,
+            golesAbajo: true,
+            golesArriba: true,
+            golesEnMedio: true,
+          },
+        },
       },
     });
     res.json({ msg: "Partida con id: " + id, error: false, data: response });
