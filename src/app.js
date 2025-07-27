@@ -24,3 +24,4 @@ app.use("/api", pacientesRoutes);
 app.use("/api", partidasRoutes);
 
 export default app;
+
