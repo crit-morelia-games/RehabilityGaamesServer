@@ -2,12 +2,13 @@ import { Router } from "express";
 import { authenticateToken, authTokenTerapeuta } from "../middleware/authToken.js";
 import { validate } from "../middleware/validator.js";
 
-import { getPartidasPaciente, getPartida, createPartida, createFootballGame } from "../controllers/partidas.controller.js";
+import { getPartidasPaciente, getPartida, createPartida, createFootballGame, createPasitosGame} from "../controllers/partidas.controller.js";
 import {
   getPartidasPacienteValidationRules,
   getPartidaValidationRules,
   createPartidaValidationRules,
 } from "../middleware/validator/partidas.rules.js";
+import { create } from "node:domain";
 
 const router = Router();
 
@@ -21,5 +22,7 @@ router.get("/partida/:id", authenticateToken, getPartidaValidationRules, validat
 router.post("/partida", authTokenTerapeuta, createPartidaValidationRules, validate, createPartida);
 
 router.post("/football", authTokenTerapeuta, validate, createFootballGame)
+
+router.post("/pasitos", authTokenTerapeuta, validate, createPasitosGame);
 
 export default router;

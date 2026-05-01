@@ -41,13 +41,27 @@ export const getPartidasPaciente = async (req, res) => {
             atajadasEnMedio: true,
             golesAbajo: true,
             golesArriba: true,
-            golesEnMedio: true,
+            saltarFallos: true,
+          },
+        },
+        PasitosGame: {
+          select: {
+            agacharEsquivados: true,
+            lateralEsquivados: true,
+            saltarEsquivados: true,
+            agacharFallos: true,
+            lateralFallos: true,
+            saltarFallos: true,
           },
         },
       },
     });
 
-    res.json({ msg: "Partidas del paciente: " + idPaciente, error: false, data: response });
+    res.json({
+      msg: "Partidas del paciente: " + idPaciente,
+      error: false,
+      data: response,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -113,6 +127,16 @@ export const getPartida = async (req, res) => {
             golesEnMedio: true,
           },
         },
+         PasitosGame: {
+          select: {
+            agacharEsquivados: true,
+            lateralEsquivados: true,
+            saltarEsquivados: true,
+            agacharFallos: true,
+            lateralFallos: true,
+            saltarFallos: true,
+          },
+        },
       },
     });
     res.json({ msg: "Partida con id: " + id, error: false, data: response });
@@ -123,8 +147,24 @@ export const getPartida = async (req, res) => {
 
 export const createPartida = async (req, res) => {
   try {
-    const { idMiniJuego, idPaciente, dificultad, tiempo, puntuacion, idExtremidad } = req.body;
-    const { angMax, derMax, izqMax, arrMax, abaMax, timeMax, timeMin, timeAvg } = req.body;
+    const {
+      idMiniJuego,
+      idPaciente,
+      dificultad,
+      tiempo,
+      puntuacion,
+      idExtremidad,
+    } = req.body;
+    const {
+      angMax,
+      derMax,
+      izqMax,
+      arrMax,
+      abaMax,
+      timeMax,
+      timeMin,
+      timeAvg,
+    } = req.body;
 
     const newPartida = await prisma.partida.create({
       data: {
@@ -146,7 +186,11 @@ export const createPartida = async (req, res) => {
       },
     });
 
-    res.json({ msg: "Partida guardada con éxito", error: false, data: newPartida });
+    res.json({
+      msg: "Partida guardada con éxito",
+      error: false,
+      data: newPartida,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -154,7 +198,17 @@ export const createPartida = async (req, res) => {
 
 export const createFootballGame = async (req, res) => {
   try {
-    const {idPaciente, easyMode, tiempo, atajadasAbajo, atajadasArriba, atajadasEnMedio, golesAbajo, golesArriba, golesEnMedio} = req.body;
+    const {
+      idPaciente,
+      easyMode,
+      tiempo,
+      atajadasAbajo,
+      atajadasArriba,
+      atajadasEnMedio,
+      golesAbajo,
+      golesArriba,
+      golesEnMedio,
+    } = req.body;
     const newPartida = await prisma.partida.create({
       data: {
         idMiniJuego: parseInt(4),
@@ -162,7 +216,10 @@ export const createFootballGame = async (req, res) => {
         idTerapeuta: parseInt(req.user.id),
         dificultad: easyMode ? 1 : 2,
         tiempo: parseInt(tiempo),
-        puntuacion: parseInt(atajadasAbajo) + parseInt(atajadasArriba) + parseInt(atajadasEnMedio),
+        puntuacion:
+          parseInt(atajadasAbajo) +
+          parseInt(atajadasArriba) +
+          parseInt(atajadasEnMedio),
         idExtremidad: parseInt(3),
       },
     });
@@ -177,9 +234,72 @@ export const createFootballGame = async (req, res) => {
         idPartida: newPartida.id,
       },
     });
-    res.json({ msg: "Juego de fútbol creado con éxito", error: false, data: newFootballGame });
+    res.json({
+      msg: "Juego de fútbol creado con éxito",
+      error: false,
+      data: newFootballGame,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ msg: "Error al crear el juego de fútbol", error: true, data: req.body });
+    res
+      .status(500)
+      .json({
+        msg: "Error al crear el juego de fútbol",
+        error: true,
+        data: req.body,
+      });
+  }
+};
+
+export const createPasitosGame = async (req, res) => {
+  try {
+    const {
+      idPaciente,
+      tiempo,
+      saltarEsquivados,
+      saltarFallos,
+      agacharEsquivados,
+      agacharFallos,
+      lateralEsquivados,
+      lateralFallos,
+    } = req.body;
+    const newPartida = await prisma.partida.create({
+      data: {
+        idMiniJuego: parseInt(5),
+        idPaciente: parseInt(idPaciente),
+        idTerapeuta: parseInt(req.user.id),
+        tiempo: parseInt(tiempo),
+        puntuacion:
+          parseInt(saltarEsquivados) +
+          parseInt(agacharEsquivados) +
+          parseInt(lateralEsquivados),
+        idExtremidad: parseInt(3),
+      },
+    });
+    const newPasitosGame = await prisma.pasitosGame.create({
+      data: {
+        agacharEsquivados: parseInt(agacharEsquivados),
+        lateralEsquivados: parseInt(lateralEsquivados),
+        saltarEsquivados: parseInt(saltarEsquivados),
+        agacharFallos: parseInt(agacharFallos),
+        lateralFallos: parseInt(lateralFallos),
+        saltarFallos: parseInt(saltarFallos),
+        idPartida: newPartida.id,
+      },
+    });
+    res.json({
+      msg: "Juego de pasitos creado con éxito",
+      error: false,
+      data: newPasitosGame,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({
+        msg: "Error al crear el juego de pasitos",
+        error: true,
+        data: req.body,
+      });
   }
 };
