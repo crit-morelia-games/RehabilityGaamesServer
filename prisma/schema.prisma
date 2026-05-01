@@ -43,26 +43,26 @@ model Organizacion {
 }
 
 model Terapeuta {
-  id             Int            @id @default(autoincrement())
+  id             Int          @id @default(autoincrement())
   nombre         String
   aPaterno       String
   aMaterno       String?
-  email          String         @unique
+  email          String       @unique
   pass           String
   idOrganizacion Int
   telefono       String
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  lastLogin      DateTime       @default(now())
-  lastLoginApp   DateTime       @default(now())
-  isActive       Boolean        @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  lastLogin      DateTime     @default(now())
+  lastLoginApp   DateTime     @default(now())
+  isActive       Boolean      @default(true)
   pacientes      Paciente[]
   partidas       Partida[]
-  organizacion   Organizacion   @relation(fields: [idOrganizacion], references: [id])
+  organizacion   Organizacion @relation(fields: [idOrganizacion], references: [id])
 }
 
 model Paciente {
-  id              Int            @id
+  id              Int       @id
   nombre          String
   aPaterno        String
   aMaterno        String?
@@ -70,15 +70,15 @@ model Paciente {
   diagnostico     String
   fechaNacimiento DateTime
   idTerapeuta     Int
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  isActive        Boolean        @default(true)
-  terapeuta       Terapeuta      @relation(fields: [idTerapeuta], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  isActive        Boolean   @default(true)
+  terapeuta       Terapeuta @relation(fields: [idTerapeuta], references: [id])
   partidas        Partida[]
 }
 
 model Partida {
-  id              Int          @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   idMiniJuego     Int?
   idPaciente      Int?
   idTerapeuta     Int?
@@ -94,24 +94,37 @@ model Partida {
   responseTimeMax Float?
   responseTimeMin Float?
   responseTimeAvg Float?
-  createdAt       DateTime     @default(now())
-  extremidad      Extremidad?  @relation(fields: [idExtremidad], references: [id])
-  miniJuego       MiniJuego?   @relation(fields: [idMiniJuego], references: [id])
-  paciente        Paciente?    @relation(fields: [idPaciente], references: [id])
-  terapeuta       Terapeuta?   @relation(fields: [idTerapeuta], references: [id])
+  createdAt       DateTime      @default(now())
   FootballGame    FootballGame?
+  extremidad      Extremidad?   @relation(fields: [idExtremidad], references: [id])
+  miniJuego       MiniJuego?    @relation(fields: [idMiniJuego], references: [id])
+  paciente        Paciente?     @relation(fields: [idPaciente], references: [id])
+  terapeuta       Terapeuta?    @relation(fields: [idTerapeuta], references: [id])
+  pasitosGame     PasitosGame?  
 }
 
 model FootballGame {
-  id              Int        @id @default(autoincrement())
+  id              Int     @id @default(autoincrement())
   atajadasAbajo   Int
   atajadasArriba  Int
   atajadasEnMedio Int
   golesAbajo      Int
   golesArriba     Int
   golesEnMedio    Int
-  idPartida       Int        @unique
-  Partida         Partida    @relation(fields: [idPartida], references: [id])
+  idPartida       Int     @unique
+  Partida         Partida @relation(fields: [idPartida], references: [id])
+}
+
+model PasitosGame {
+  id                 Int        @id @default(autoincrement())
+  agacharEsquivados  Int
+  lateralEsquivados  Int
+  saltarEsquivados   Int
+  agacharFallos      Int
+  lateralFallos      Int
+  saltarFallos       Int
+  idPartida          Int        @unique
+  Partida         Partida       @relation(fields: [idPartida], references: [id])
 }
 
 enum Sexo {
